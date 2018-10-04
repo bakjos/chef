@@ -30,46 +30,46 @@ end
 
 action :install do
   if new_resource.msu_source.to_s.empty?
-    gusztavvargadr_windows_powershell_script_elevated 'Install Updates' do
-      code <<-EOH
-        Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -IgnoreReboot
-      EOH
-      timeout 7_200
-      action :run
-    end
+    # gusztavvargadr_windows_powershell_script_elevated 'Install Updates' do
+    #   code <<-EOH
+    #     Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -IgnoreReboot
+    #   EOH
+    #   timeout 7_200
+    #   action :run
+    # end
   else
-    directory_path = "#{Chef::Config[:file_cache_path]}/gusztavvargadr_windows/updates"
-    directory directory_path do
-      recursive true
-      action :create
-    end
+    # directory_path = "#{Chef::Config[:file_cache_path]}/gusztavvargadr_windows/updates"
+    # directory directory_path do
+    #   recursive true
+    #   action :create
+    # end
 
-    msu_file_path = "#{directory_path}/msu.msu"
-    remote_file msu_file_path do
-      source new_resource.msu_source
-      action :create
-    end
+    # msu_file_path = "#{directory_path}/msu.msu"
+    # remote_file msu_file_path do
+    #   source new_resource.msu_source
+    #   action :create
+    # end
 
-    gusztavvargadr_windows_powershell_script_elevated 'Install Updates' do
-      code <<-EOH
-        Start-Process "wusa.exe" "#{msu_file_path} /quiet /norestart" -Wait
-      EOH
-      action :run
-    end
+    # gusztavvargadr_windows_powershell_script_elevated 'Install Updates' do
+    #   code <<-EOH
+    #     Start-Process "wusa.exe" "#{msu_file_path} /quiet /norestart" -Wait
+    #   EOH
+    #   action :run
+    # end
   end
 end
 
 action :cleanup do
-  gusztavvargadr_windows_powershell_script_elevated 'Clean up Updates' do
-    # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
-    # DISM.exe /Online /Cleanup-Image /StartComponentCleanup
-    code <<-EOH
-      DISM.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
-    EOH
-    # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
-    timeout 7_200
-    action :run
-  end
+  # gusztavvargadr_windows_powershell_script_elevated 'Clean up Updates' do
+  #   # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
+  #   # DISM.exe /Online /Cleanup-Image /StartComponentCleanup
+  #   code <<-EOH
+  #     DISM.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+  #   EOH
+  #   # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
+  #   timeout 7_200
+  #   action :run
+  # end
 end
 
 action :stop do
